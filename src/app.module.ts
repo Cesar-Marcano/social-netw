@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
       useFactory: async (
         configService: ConfigService,
@@ -15,6 +16,7 @@ import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
       }),
       inject: [ConfigModule],
     }),
+    UserModule,
   ],
 })
 export class AppModule {}
