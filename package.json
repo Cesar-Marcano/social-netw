@@ -81,6 +81,9 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-    "*.ts": "pnpm run format && pnpm run lint"
+    "*.ts": [
+      "pnpm run format",
+      "pnpm run lint"
+    ]
   }
 }
