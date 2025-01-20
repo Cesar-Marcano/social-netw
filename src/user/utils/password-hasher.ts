@@ -1,7 +1,10 @@
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 export default class PasswordHasher {
-  public static async compare(password: string, hash: string): Promise<boolean> {
+  public static async compare(
+    password: string,
+    hash: string,
+  ): Promise<boolean> {
     return bcrypt.compare(password, hash);
   }
 
