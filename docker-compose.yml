@@ -1,0 +1,53 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: my-app
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - .:/app
+    # depends_on:
+    # - mongo
+    # - postgres
+    # - redis
+    restart: unless-stopped
+
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: mongo-database
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=admin
+  #     - MONGO_INITDB_ROOT_PASSWORD=adminpassword
+  #   volumes:
+  #     - mongo-data:/data/db
+  #   restart: unless-stopped
+
+  # postgres:
+  #   image: postgres:latest
+  #   container_name: postgres-database
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgrespassword
+  #     - POSTGRES_DB=my-database
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+
+  # redis:
+  #   image: redis:latest
+  #   container_name: redis-database
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+
+# volumes:
+#   postgres-data:
+#   mongo-data:
