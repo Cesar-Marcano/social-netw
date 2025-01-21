@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
 import mongoose, { Model } from 'mongoose';
+import PasswordHasher from './utils/password-hasher';
+import Password from './data-object/password.data-object';
 
 @Injectable()
 export class UserService {
@@ -10,6 +12,8 @@ export class UserService {
   ) {}
 
   public async create(userData: User): Promise<UserDocument> {
+    userData.password = await PasswordHasher.hash(new Password(userData.password));
+
     return this.userModel.create(userData);
   }
 
@@ -31,6 +35,8 @@ export class UserService {
     _id: mongoose.Types.ObjectId,
     newData: Partial<User>,
   ): Promise<UserDocument | null> {
+    if (newData.password) newData.password = await PasswordHasher.hash(new Password(newData.password));
+
     return this.userModel.findOneAndUpdate({ _id }, newData, {
       runValidators: true,
       new: true,
@@ -38,6 +44,6 @@ export class UserService {
   }
 
   public async deleteUser(_id: mongoose.Types.ObjectId): Promise<boolean> {
-    return !!await this.userModel.findOneAndDelete({ _id });
+    return !!(await this.userModel.findOneAndDelete({ _id }));
   }
 }
