@@ -1,4 +1,43 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from './user.schema';
+import mongoose, { Model } from 'mongoose';
 
 @Injectable()
-export class UserService {}
+export class UserService {
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+  ) {}
+
+  public async create(userData: User): Promise<UserDocument> {
+    return this.userModel.create(userData);
+  }
+
+  public async findByEmail(email: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ email });
+  }
+
+  public async findByUsername(username: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ username });
+  }
+
+  public async findById(
+    _id: mongoose.Types.ObjectId,
+  ): Promise<UserDocument | null> {
+    return this.userModel.findOne({ _id });
+  }
+
+  public async updateUser(
+    _id: mongoose.Types.ObjectId,
+    newData: Partial<User>,
+  ): Promise<UserDocument | null> {
+    return this.userModel.findOneAndUpdate({ _id }, newData, {
+      runValidators: true,
+      new: true,
+    });
+  }
+
+  public async deleteUser(_id: mongoose.Types.ObjectId): Promise<boolean> {
+    return !!await this.userModel.findOneAndDelete({ _id });
+  }
+}
