@@ -1,3 +1,4 @@
+import Password from '../data-object/password.data-object';
 import PasswordHasher from './password-hasher';
 
 describe('PasswordHasher', () => {
@@ -6,7 +7,7 @@ describe('PasswordHasher', () => {
 
   beforeAll(async () => {
     password = 'mySecurePassword';
-    hashedPassword = await PasswordHasher.hash(password);
+    hashedPassword = await PasswordHasher.hash(new Password(password));
   });
 
   it('should return a different hash than the original password', async () => {
@@ -14,14 +15,14 @@ describe('PasswordHasher', () => {
   });
 
   it('should return true when comparing the password with its hash', async () => {
-    const result = await PasswordHasher.compare(password, hashedPassword);
+    const result = await PasswordHasher.compare(new Password(password), hashedPassword);
     expect(result).toBe(true);
   });
 
   it('should return false when comparing an incorrect password with its hash', async () => {
     const incorrectPassword = 'wrongPassword';
     const result = await PasswordHasher.compare(
-      incorrectPassword,
+      new Password(incorrectPassword),
       hashedPassword,
     );
     expect(result).toBe(false);
