@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
@@ -24,6 +25,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       }),
     }),
     UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
