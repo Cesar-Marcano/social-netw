@@ -1,7 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
 import mongoose, { Model } from 'mongoose';
+import { MongoServerError } from 'mongodb';
 import PasswordHasher from './utils/password-hasher';
 import Password from './data-object/password.data-object';
 
@@ -12,13 +17,32 @@ export class UserService {
   ) {}
 
   public async create(userData: User): Promise<UserDocument> {
-    userData.password = await PasswordHasher.hash(new Password(userData.password));
+    try {
+      userData.password = await PasswordHasher.hash(
+        new Password(userData.password),
+      );
 
-    return this.userModel.create(userData);
+      return this.userModel.create(userData);
+    } catch (error) {
+      if (error instanceof MongoServerError && error.code)
+        if (error.code === 11000) {
+          if (error['keyPattern']?.email) {
+            throw new BadRequestException('Email in use.');
+          }
+          if (error['keyPattern']?.username) {
+            throw new BadRequestException('Username in use.');
+          }
+        }
+      if (process.env['NODE_ENV']?.toLowerCase() !== 'production') {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
+    }
   }
 
   public async findByEmail(email: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ email }).select("+password");
+    return this.userModel.findOne({ email }).select('+password');
   }
 
   public async findByUsername(username: string): Promise<UserDocument | null> {
@@ -35,7 +59,10 @@ export class UserService {
     _id: mongoose.Types.ObjectId,
     newData: Partial<User>,
   ): Promise<UserDocument | null> {
-    if (newData.password) newData.password = await PasswordHasher.hash(new Password(newData.password));
+    if (newData.password)
+      newData.password = await PasswordHasher.hash(
+        new Password(newData.password),
+      );
 
     return this.userModel.findOneAndUpdate({ _id }, newData, {
       runValidators: true,
@@ -44,6 +71,7 @@ export class UserService {
   }
 
   public async deleteUser(_id: mongoose.Types.ObjectId): Promise<boolean> {
-    return !!(await this.userModel.findOneAndDelete({ _id }));
+    const deletedUser = await this.userModel.findOneAndDelete({ _id });
+    return deletedUser ? true : false;
   }
 }
