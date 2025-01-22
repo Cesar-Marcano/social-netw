@@ -21,9 +21,9 @@ services:
     container_name: mongo-database
     ports:
       - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=adminpassword
+    # environment:
+    #   - MONGO_INITDB_ROOT_USERNAME=admin
+    #   - MONGO_INITDB_ROOT_PASSWORD=adminpassword
     volumes:
       - mongo-data:/data/db
     restart: unless-stopped

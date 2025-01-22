@@ -55,7 +55,9 @@ describe('UserService', () => {
   it('should find a user by email', async () => {
     const email = 'john@example.com';
 
-    (userModel.findOne as jest.Mock).mockResolvedValue(mockUser as UserDocument);
+    (userModel.findOne as jest.Mock).mockReturnValue({
+      select: jest.fn().mockResolvedValue(mockUser as UserDocument),
+    });
 
     const result = await service.findByEmail(email);
 
