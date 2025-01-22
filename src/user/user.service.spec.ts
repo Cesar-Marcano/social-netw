@@ -15,6 +15,8 @@ describe('UserService', () => {
     username: 'john_doe',
     email: 'john@example.com',
     password: 'hashedpassword',
+    followers: [],
+    following: [],
   };
 
   beforeEach(async () => {
@@ -42,9 +44,11 @@ describe('UserService', () => {
       username: 'john_doe',
       email: 'john@example.com',
       password: 'password123',
+      followers: [],
+      following: [],
     };
 
-    (userModel.create as jest.Mock).mockResolvedValue(mockUser as UserDocument);
+    (userModel.create as jest.Mock).mockResolvedValue(mockUser as unknown as UserDocument);
 
     const result = await service.create(userData);
 
@@ -56,7 +60,7 @@ describe('UserService', () => {
     const email = 'john@example.com';
 
     (userModel.findOne as jest.Mock).mockReturnValue({
-      select: jest.fn().mockResolvedValue(mockUser as UserDocument),
+      select: jest.fn().mockResolvedValue(mockUser as unknown as UserDocument),
     });
 
     const result = await service.findByEmail(email);
@@ -68,7 +72,7 @@ describe('UserService', () => {
   it('should find a user by username', async () => {
     const username = 'john_doe';
 
-    userModel.findOne.mockResolvedValue(mockUser as UserDocument);
+    userModel.findOne.mockResolvedValue(mockUser as unknown as UserDocument);
 
     const result = await service.findByUsername(username);
 
@@ -79,7 +83,7 @@ describe('UserService', () => {
   it('should find a user by id', async () => {
     const id = new mongoose.Types.ObjectId();
 
-    userModel.findOne.mockResolvedValue(mockUser as UserDocument);
+    userModel.findOne.mockResolvedValue(mockUser as unknown as UserDocument);
 
     const result = await service.findById(id);
 
@@ -92,7 +96,7 @@ describe('UserService', () => {
     const newData = { username: 'john_updated' };
 
     const updatedUser = { ...mockUser, ...newData };
-    userModel.findOneAndUpdate.mockResolvedValue(updatedUser as UserDocument);
+    userModel.findOneAndUpdate.mockResolvedValue(updatedUser as unknown as UserDocument);
 
     const result = await service.updateUser(id, newData);
 
@@ -107,7 +111,7 @@ describe('UserService', () => {
   it('should delete a user', async () => {
     const id = new mongoose.Types.ObjectId();
 
-    userModel.findOneAndDelete.mockResolvedValue(mockUser as UserDocument);
+    userModel.findOneAndDelete.mockResolvedValue(mockUser as unknown as UserDocument);
 
     const result = await service.deleteUser(id);
 
