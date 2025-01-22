@@ -85,29 +85,31 @@ export class UserService {
     return true;
   }
 
-  async followUser(followerId: mongoose.Types.ObjectId, followingId: mongoose.Types.ObjectId): Promise<UserDocument> {
+  async followUser(
+    followerId: mongoose.Types.ObjectId,
+    followingId: mongoose.Types.ObjectId,
+  ): Promise<UserDocument> {
     const follower = await this.userModel.findById(followerId);
     const following = await this.userModel.findById(followingId);
-  
+
     if (!follower || !following) {
       throw new NotFoundException('User not found');
     }
-  
+
     if (followerId.equals(followingId)) {
       throw new BadRequestException('You cannot follow yourself');
     }
-  
+
     if (follower.following!.includes(followingId)) {
       throw new BadRequestException('You are already following this user');
     }
-  
+
     follower.following!.push(followingId);
     await follower.save();
-  
+
     following.followers!.push(followerId);
     await following.save();
-  
+
     return follower;
   }
-  
 }
