@@ -8,4 +8,11 @@ type Query {
 
 type Mutation {
   login(email: String!, password: String!): String!
+  register(userData: RegisterDto!): String!
+}
+
+input RegisterDto {
+  username: String!
+  password: String!
+  email: String!
 }

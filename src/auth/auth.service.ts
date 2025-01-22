@@ -4,6 +4,9 @@ import Password from '../user/data-object/password.data-object';
 import { UserDocument } from '../user/user.schema';
 import { UserService } from '../user/user.service';
 import PasswordHasher from '../user/utils/password-hasher';
+import { RegisterDto } from './dto/register.dto';
+import { Payload } from './types/payload.type';
+import { AccessTokenResponse } from './types/acccess-token-response.type';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +15,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<UserDocument | null> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<UserDocument | null> {
     const user = await this.userService.findByEmail(email);
     if (
       user &&
@@ -23,8 +29,18 @@ export class AuthService {
     return null;
   }
 
-  async login(user: UserDocument) {
-    const payload = { email: user.email, sub: user._id };
+  async login(user: UserDocument): Promise<AccessTokenResponse> {
+    const payload: Payload = { email: user.email, sub: user._id };
+    return {
+      accessToken: this.jwtService.sign(payload),
+    };
+  }
+
+  async register(user: RegisterDto): Promise<AccessTokenResponse> {
+    const newUser = await this.userService.create(user);
+
+    const payload: Payload = { email: newUser.email, sub: newUser._id };
+
     return {
       accessToken: this.jwtService.sign(payload),
     };
