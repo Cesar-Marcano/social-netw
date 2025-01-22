@@ -119,7 +119,7 @@ describe('UserService', () => {
     expect(result).toBe(true);
 
     userModel.findOneAndDelete.mockResolvedValue(null);
-    const resultWhenNotFound = await service.deleteUser(id);
-    expect(resultWhenNotFound).toBe(false);
+
+    await expect(service.deleteUser(id)).rejects.toThrow();
   });
 });

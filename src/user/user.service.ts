@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
@@ -71,7 +72,42 @@ export class UserService {
   }
 
   public async deleteUser(_id: mongoose.Types.ObjectId): Promise<boolean> {
-    const deletedUser = await this.userModel.findOneAndDelete({ _id });
-    return deletedUser ? true : false;
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      throw new BadRequestException('Invalid user ID format');
+    }
+
+    const result = await this.userModel.findOneAndDelete({ _id });
+
+    if (!result) {
+      throw new NotFoundException('User not found for deletion');
+    }
+
+    return true;
   }
+
+  async followUser(followerId: mongoose.Types.ObjectId, followingId: mongoose.Types.ObjectId): Promise<UserDocument> {
+    const follower = await this.userModel.findById(followerId);
+    const following = await this.userModel.findById(followingId);
+  
+    if (!follower || !following) {
+      throw new NotFoundException('User not found');
+    }
+  
+    if (followerId.equals(followingId)) {
+      throw new BadRequestException('You cannot follow yourself');
+    }
+  
+    if (follower.following!.includes(followingId)) {
+      throw new BadRequestException('You are already following this user');
+    }
+  
+    follower.following!.push(followingId);
+    await follower.save();
+  
+    following.followers!.push(followerId);
+    await following.save();
+  
+    return follower;
+  }
+  
 }

@@ -28,10 +28,10 @@ export class User {
   email!: string;
 
   @Prop({ type: [mongoose.Types.ObjectId], ref: 'User', default: [] })
-  followers?: User[];
+  followers?: mongoose.Types.ObjectId[];
 
   @Prop({ type: [mongoose.Types.ObjectId], ref: 'User', default: [] })
-  following?: User[];
+  following?: mongoose.Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
