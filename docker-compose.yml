@@ -3,16 +3,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: my-app
+    container_name: social-netw
     ports:
-      - "8000:8000"
+      - "3000:3000"
     environment:
       - NODE_ENV=production
     volumes:
       - .:/app
     depends_on:
     - mongo
-    # - postgres
     - redis
     restart: unless-stopped
 
