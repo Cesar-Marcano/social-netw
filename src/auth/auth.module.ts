@@ -10,12 +10,13 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 @Module({
   imports: [
     UserModule,
+    ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'default_jwt_secret',
-        signOptions: { expiresIn: '1h' },
+        secret: configService.get<string>('JWT_SECRET', 'default_jwt_secret'),
+        signOptions: { expiresIn: configService.get<string>('JWT_ACCESS_TOKEN_EXPIRATION', '15m') },
       }),
     }),
   ],

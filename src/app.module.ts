@@ -35,8 +35,7 @@ import { GraphQLFormattedError } from 'graphql';
         configService: ConfigService,
       ): Promise<MongooseModuleFactoryOptions> => ({
         uri:
-          configService.get<string>('MONGO_URI') ??
-          'mongodb://localhost:27017/test',
+          configService.get<string>('MONGO_URI', 'mongodb://localhost:27017/test'),
       }),
     }),
     UserModule,

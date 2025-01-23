@@ -32,6 +32,7 @@ input FindPostByAuthorDto {
 type Mutation {
   login(userData: LoginDto!): String!
   register(userData: RegisterDto!): String!
+  getAccessToken(tokenData: GetAccessTokenDto!): String!
   createPost(postContent: CreatePostDto!): Post!
   findPostByText(searchParams: FindPostByTextDto!): SearchPost!
   deletePost(postInfo: DeletePostDto!): Boolean!
@@ -47,6 +48,10 @@ input RegisterDto {
   username: String!
   password: String!
   email: String!
+}
+
+input GetAccessTokenDto {
+  refreshToken: String!
 }
 
 input CreatePostDto {

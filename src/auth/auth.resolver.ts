@@ -2,6 +2,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { GetAccessTokenDto } from './dto/get-access-token.dto';
 
 @Resolver()
 export class AuthResolver {
@@ -16,13 +17,24 @@ export class AuthResolver {
     if (!user) {
       throw new Error('Invalid credentials.');
     }
-    const { accessToken } = await this.authService.login(user);
-    return accessToken;
+    const { refreshToken } = await this.authService.login(user);
+    return refreshToken;
   }
 
   @Mutation(() => String)
   async register(@Args('userData') userData: RegisterDto): Promise<string> {
-    const { accessToken } = await this.authService.register(userData);
+    const { refreshToken } = await this.authService.register(userData);
+
+    return refreshToken;
+  }
+
+  @Mutation(() => String)
+  async getAccessToken(
+    @Args('tokenData') tokenData: GetAccessTokenDto,
+  ): Promise<string> {
+    const { accessToken } = await this.authService.getAccessToken(
+      tokenData.refreshToken,
+    );
 
     return accessToken;
   }
