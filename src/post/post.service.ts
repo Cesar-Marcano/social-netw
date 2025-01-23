@@ -17,16 +17,6 @@ export class PostService {
     return this.postModel.create(post);
   }
 
-  async find(postId: Types.ObjectId): Promise<PostDocument> {
-    const post = await this.postModel.findById(postId);
-
-    if (!post) {
-      throw new NotFoundException('Post not found');
-    }
-
-    return post;
-  }
-
   async findByText(
     searchTerm: string,
     page: number = 1,
