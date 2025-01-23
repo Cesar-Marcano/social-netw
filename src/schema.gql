@@ -24,6 +24,8 @@ type Mutation {
   register(userData: RegisterDto!): String!
   createPost(postContent: CreatePostDto!): Post!
   findPostByText(searchParams: FindPostByTextDto!): SearchPost!
+  findPostById(searchParams: FindPostByTextDto!): SearchPost!
+  deletePost(postInfo: DeletePostDto!): Boolean!
 }
 
 input LoginDto {
@@ -53,4 +55,8 @@ input FindPostByTextDto {
   searchTerm: String!
   page: Int!
   limit: Int!
+}
+
+input DeletePostDto {
+  postId: String!
 }

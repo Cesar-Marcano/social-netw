@@ -9,6 +9,8 @@ import { CurrentUser } from 'src/auth/user.decorator';
 import { ICurrentUser } from 'src/auth/types/current-user.type';
 import { SearchPost } from './types/search-post.type';
 import { FindPostByTextDto } from './dto/find-post-by-text.dto';
+import { DeletePostDto } from './dto/delete-post.dto';
+import { FindPostByIdDto } from './dto/find-post-by-id.dto';
 
 @Resolver()
 export class PostResolver {
@@ -42,5 +44,22 @@ export class PostResolver {
       searchParams.page,
       searchParams.limit,
     );
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => Post)
+  async findPostById(
+    @Args('searchParams') searchParams: FindPostByIdDto,
+  ): Promise<Post> {
+    return this.postService.findPostById(searchParams.postId);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async deletePost(
+    @Args('postInfo') postInfo: DeletePostDto,
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<boolean> {
+    return this.postService.deletePost(postInfo.postId, currentUser.userId);
   }
 }

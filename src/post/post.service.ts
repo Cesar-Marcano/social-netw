@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Post, PostDocument } from './post.schema';
@@ -87,10 +88,15 @@ export class PostService {
     return updatedPost;
   }
 
-  async deletePost(postId: Types.ObjectId): Promise<boolean> {
-    if (!Types.ObjectId.isValid(postId)) {
-      throw new BadRequestException('Invalid post ID format');
-    }
+  async deletePost(
+    postId: Types.ObjectId,
+    userId: Types.ObjectId,
+  ): Promise<boolean> {
+    const post = await this.postModel.findById(postId);
+    if (post?.author !== userId)
+      throw new UnauthorizedException(
+        'You must be the author of the post to perform this action.',
+      );
 
     const result = await this.postModel.findByIdAndDelete(postId);
     if (!result) {
