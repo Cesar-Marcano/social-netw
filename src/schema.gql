@@ -2,13 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Post {
+  id: ID!
+  author: String!
+  content: String!
+  privacy: String!
+}
+
 type Query {
-  sayHello: String!
+  getPost(postId: String!): Post!
 }
 
 type Mutation {
   login(userData: LoginDto!): String!
   register(userData: RegisterDto!): String!
+  createPost(postContent: CreatePostDto!): Post!
 }
 
 input LoginDto {
@@ -20,4 +28,16 @@ input RegisterDto {
   username: String!
   password: String!
   email: String!
+}
+
+input CreatePostDto {
+  title: String!
+  content: String!
+  privacy: PostPrivacy!
+}
+
+enum PostPrivacy {
+  PUBLIC
+  MUTUAL_FOLLOWERS
+  PRIVATE
 }
