@@ -7,12 +7,25 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { PostModule } from './post/post.module';
+import { GraphQLFormattedError } from 'graphql';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), "src/schema.gql"),
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      formatError: (formattedError, _error): GraphQLFormattedError => {
+        const { message, extensions } = formattedError;
+
+        return {
+          message,
+          extensions: {
+            code: extensions!['code'],
+            originalError: extensions!['originalError'],
+          },
+        };
+      },
+      debug: false,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
