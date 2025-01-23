@@ -5,8 +5,14 @@
 type Post {
   id: ID!
   author: String!
+  title: String!
   content: String!
   privacy: String!
+}
+
+type SearchPost {
+  posts: [Post!]!
+  totalResults: Int!
 }
 
 type Query {
@@ -17,6 +23,7 @@ type Mutation {
   login(userData: LoginDto!): String!
   register(userData: RegisterDto!): String!
   createPost(postContent: CreatePostDto!): Post!
+  findPostByText(searchParams: FindPostByTextDto!): SearchPost!
 }
 
 input LoginDto {
@@ -40,4 +47,10 @@ enum PostPrivacy {
   PUBLIC
   MUTUAL_FOLLOWERS
   PRIVATE
+}
+
+input FindPostByTextDto {
+  searchTerm: String!
+  page: Int!
+  limit: Int!
 }
