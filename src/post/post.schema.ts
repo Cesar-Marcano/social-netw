@@ -17,8 +17,9 @@ export class Post {
   @Prop({ required: true, ref: 'User', type: mongoose.Types.ObjectId })
   @Field(() => String)
   author!: mongoose.Types.ObjectId;
-
+  
   @Prop({ required: true, min: 1, max: 255 })
+  @Field(() => String)
   title!: string;
 
   @Prop({ required: true, min: 1, max: 1024 })
