@@ -2,11 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { PostPrivacy } from './types/post-privacy.enum';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { MongooseTimestamp } from 'src/common/types/mongoose-timestamp.type';
 
-export type PostDocument = HydratedDocument<Post> & {
-  createdAt?: Date;
-  updatedAt?: Date;
-};
+export type PostDocument = HydratedDocument<Post> & MongooseTimestamp;
 
 @ObjectType()
 @Schema({ timestamps: true })
