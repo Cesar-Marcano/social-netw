@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Comment, CommentDocument } from './comment.schema';
@@ -57,5 +58,52 @@ export class CommentService {
       data: comments,
       totalCount,
     };
+  }
+
+  async updateComment(
+    commentId: Types.ObjectId,
+    commentData: Partial<Comment>,
+    userId: Types.ObjectId,
+  ): Promise<CommentDocument> {
+    const comment = await this.findCommentById(commentId);
+
+    if (comment?.author !== userId)
+      throw new UnauthorizedException(
+        'You must be the author of the comment to perform this action.',
+      );
+
+    const newComment = await this.commentModel.findByIdAndUpdate(
+      commentId,
+      commentData,
+      {
+        new: true,
+      },
+    );
+
+    return newComment!;
+  }
+
+  async deleteComment(
+    commentId: Types.ObjectId,
+    userId: Types.ObjectId,
+  ): Promise<boolean> {
+    const comment = await this.findCommentById(commentId);
+
+    if (comment?.author !== userId)
+      throw new UnauthorizedException(
+        'You must be the author of the comment to perform this action.',
+      );
+
+    const result = await this.commentModel.findByIdAndDelete(commentId);
+
+    return result !== null;
+  }
+
+  async findCommentById(commentId: Types.ObjectId): Promise<CommentDocument> {
+    const comment = await this.commentModel.findById(commentId);
+
+    if (!comment) throw new NotFoundException('Comment not found.');
+
+    return comment;
   }
 }
