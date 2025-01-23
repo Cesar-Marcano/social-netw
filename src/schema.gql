@@ -15,6 +15,13 @@ type SearchPost {
   totalResults: Int!
 }
 
+type Comment {
+  id: ID!
+  author: String!
+  post: String!
+  content: String!
+}
+
 type Query {
   getPost(postId: String!): Post!
   findPostById(searchParams: FindPostByIdDto!): Post!
@@ -37,6 +44,7 @@ type Mutation {
   findPostByText(searchParams: FindPostByTextDto!): SearchPost!
   deletePost(postInfo: DeletePostDto!): Boolean!
   updatePost(postInfo: UpdatePostDto!): Post!
+  createComment(commentData: CreateCommentDto!): Comment!
 }
 
 input LoginDto {
@@ -85,4 +93,8 @@ input NewPostContentDto {
   title: String
   content: String
   privacy: PostPrivacy
+}
+
+input CreateCommentDto {
+  post: String!
 }

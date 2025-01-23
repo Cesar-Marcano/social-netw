@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Comment, CommentSchema } from './comment.schema';
 import { UserModule } from 'src/user/user.module';
 import { PostModule } from 'src/post/post.module';
+import { CommentResolver } from './comment.resolver';
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { PostModule } from 'src/post/post.module';
     UserModule,
     PostModule,
   ],
-  providers: [CommentService],
+  providers: [CommentService, CommentResolver],
 })
 export class CommentModule {}
