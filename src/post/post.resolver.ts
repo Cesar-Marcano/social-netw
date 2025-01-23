@@ -12,6 +12,7 @@ import { FindPostByTextDto } from './dto/find-post-by-text.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
 import { FindPostByIdDto } from './dto/find-post-by-id.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { FindPostByAuthorDto } from './dto/find-posts-by-author.dto';
 
 @Resolver()
 export class PostResolver {
@@ -53,6 +54,14 @@ export class PostResolver {
     @Args('searchParams') searchParams: FindPostByIdDto,
   ): Promise<Post> {
     return this.postService.findPostById(searchParams.postId);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [Post])
+  async findPostByAuthor(
+    @Args('searchParams') searchParams: FindPostByAuthorDto,
+  ): Promise<Post[]> {
+    return this.postService.findPostByAuthor(searchParams.authorId);
   }
 
   @UseGuards(GqlAuthGuard)

@@ -18,10 +18,15 @@ type SearchPost {
 type Query {
   getPost(postId: String!): Post!
   findPostById(searchParams: FindPostByIdDto!): Post!
+  findPostByAuthor(searchParams: FindPostByAuthorDto!): [Post!]!
 }
 
 input FindPostByIdDto {
   postId: String!
+}
+
+input FindPostByAuthorDto {
+  authorId: String!
 }
 
 type Mutation {
