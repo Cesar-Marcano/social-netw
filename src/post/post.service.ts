@@ -70,7 +70,15 @@ export class PostService {
   async updatePost(
     postId: Types.ObjectId,
     content: Partial<Post>,
+    userId: Types.ObjectId,
   ): Promise<PostDocument> {
+    const post = await this.postModel.findById(postId);
+
+    if (post?.author !== userId)
+      throw new UnauthorizedException(
+        'You must be the author of the post to perform this action.',
+      );
+
     if (!content || Object.keys(content).length === 0) {
       throw new BadRequestException('No content provided for update');
     }

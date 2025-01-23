@@ -11,6 +11,7 @@ import { SearchPost } from './types/search-post.type';
 import { FindPostByTextDto } from './dto/find-post-by-text.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
 import { FindPostByIdDto } from './dto/find-post-by-id.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Resolver()
 export class PostResolver {
@@ -61,5 +62,14 @@ export class PostResolver {
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<boolean> {
     return this.postService.deletePost(postInfo.postId, currentUser.userId);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Post)
+  async updatePost(
+    @Args('postInfo') postInfo: UpdatePostDto,
+    @CurrentUser() currentUser: ICurrentUser,
+  ): Promise<Post> {
+    return this.postService.updatePost(postInfo.postId, postInfo.newPostContent, currentUser.userId);
   }
 }

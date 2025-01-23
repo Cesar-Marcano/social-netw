@@ -5,6 +5,6 @@ import { Types } from 'mongoose';
 @InputType()
 export class FindPostByIdDto {
   @IsMongoId()
-  @Field()
+  @Field(() => String)
   postId!: Types.ObjectId;
 }

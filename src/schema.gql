@@ -17,6 +17,11 @@ type SearchPost {
 
 type Query {
   getPost(postId: String!): Post!
+  findPostById(searchParams: FindPostByIdDto!): Post!
+}
+
+input FindPostByIdDto {
+  postId: String!
 }
 
 type Mutation {
@@ -24,8 +29,8 @@ type Mutation {
   register(userData: RegisterDto!): String!
   createPost(postContent: CreatePostDto!): Post!
   findPostByText(searchParams: FindPostByTextDto!): SearchPost!
-  findPostById(searchParams: FindPostByTextDto!): SearchPost!
   deletePost(postInfo: DeletePostDto!): Boolean!
+  updatePost(postInfo: UpdatePostDto!): Post!
 }
 
 input LoginDto {
@@ -59,4 +64,15 @@ input FindPostByTextDto {
 
 input DeletePostDto {
   postId: String!
+}
+
+input UpdatePostDto {
+  postId: String!
+  newPostContent: NewPostContentDto!
+}
+
+input NewPostContentDto {
+  title: String
+  content: String
+  privacy: PostPrivacy
 }
