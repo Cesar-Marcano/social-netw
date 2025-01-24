@@ -45,6 +45,7 @@ type Mutation {
   deletePost(postInfo: DeletePostDto!): Boolean!
   updatePost(postInfo: UpdatePostDto!): Post!
   createComment(commentData: CreateCommentDto!): Comment!
+  updateComment(commentInfo: UpdateCommentDto!): Comment!
 }
 
 input LoginDto {
@@ -97,4 +98,13 @@ input NewPostContentDto {
 
 input CreateCommentDto {
   post: String!
+}
+
+input UpdateCommentDto {
+  commentId: String!
+  newCommentContent: NewCommentContentDto!
+}
+
+input NewCommentContentDto {
+  content: String!
 }
