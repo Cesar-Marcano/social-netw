@@ -26,10 +26,10 @@ export class CommentService {
 
     if (!user)
       throw new NotFoundException(
-        'Unexcepted Error: Comment author not found. Try to Log In again.',
+        'Unexpected Error: Comment author not found. Try to Log In again.',
       );
 
-    if (!post) throw new NotFoundException('Unexcepted Error: Post not found.');
+    if (!post) throw new NotFoundException('Unexpected Error: Post not found.');
 
     return this.commentModel.create(comment);
   }
