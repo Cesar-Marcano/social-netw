@@ -8,6 +8,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { PostModule } from './post/post.module';
 import { GraphQLFormattedError } from 'graphql';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { GraphQLFormattedError } from 'graphql';
     UserModule,
     AuthModule,
     PostModule,
+    CommentModule,
   ],
 })
 export class AppModule {}

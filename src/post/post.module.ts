@@ -7,5 +7,6 @@ import { PostResolver } from './post.resolver';
 @Module({
   imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }])],
   providers: [PostService, PostResolver],
+  exports: [PostService],
 })
 export class PostModule {}
