@@ -9,6 +9,8 @@ import { join } from 'path';
 import { PostModule } from './post/post.module';
 import { GraphQLFormattedError } from 'graphql';
 import { CommentModule } from './comment/comment.module';
+import { WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
 
 @Module({
   imports: [
@@ -29,14 +31,27 @@ import { CommentModule } from './comment/comment.module';
       debug: false,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.json(),
+          ),
+        }),
+        new winston.transports.File({ filename: 'logs/application.log' }),
+      ],
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (
         configService: ConfigService,
       ): Promise<MongooseModuleFactoryOptions> => ({
-        uri:
-          configService.get<string>('MONGO_URI', 'mongodb://localhost:27017/test'),
+        uri: configService.get<string>(
+          'MONGO_URI',
+          'mongodb://localhost:27017/test',
+        ),
       }),
     }),
     UserModule,
