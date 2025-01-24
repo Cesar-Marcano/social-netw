@@ -11,6 +11,7 @@ import DeleteCommentDto from './dto/delete-comment.dto';
 import PaginationResponse from 'src/common/types/pagination-response.type';
 import GetCommentDto from './dto/get-comment.dto';
 import GetPostCommentsDto from './dto/get-post-comments.dto';
+import { GetPostCommentsResponse } from './types/get-post-comments-response.type';
 
 @Resolver()
 export class CommentResolver {
@@ -54,7 +55,7 @@ export class CommentResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => PaginationResponse<Comment>)
+  @Query(() => GetPostCommentsResponse)
   async getPostComments(
     @Args('postInfo') postInfo: GetPostCommentsDto,
   ): Promise<PaginationResponse<Comment>> {

@@ -22,10 +22,17 @@ type Comment {
   content: String!
 }
 
+type GetPostCommentsResponse {
+  totalCount: Float!
+  data: [Comment!]!
+}
+
 type Query {
   getPost(postId: String!): Post!
   findPostById(searchParams: FindPostByIdDto!): Post!
   findPostByAuthor(searchParams: FindPostByAuthorDto!): [Post!]!
+  getPostComments(postInfo: GetPostCommentsDto!): GetPostCommentsResponse!
+  getComment(commentInfo: GetCommentDto!): Comment!
 }
 
 input FindPostByIdDto {
@@ -34,6 +41,16 @@ input FindPostByIdDto {
 
 input FindPostByAuthorDto {
   authorId: String!
+}
+
+input GetPostCommentsDto {
+  postId: String!
+  page: Float!
+  limit: Float!
+}
+
+input GetCommentDto {
+  commentId: String!
 }
 
 type Mutation {
@@ -46,6 +63,7 @@ type Mutation {
   updatePost(postInfo: UpdatePostDto!): Post!
   createComment(commentData: CreateCommentDto!): Comment!
   updateComment(commentInfo: UpdateCommentDto!): Comment!
+  deleteComment(commentInfo: DeleteCommentDto!): Boolean!
 }
 
 input LoginDto {
@@ -107,4 +125,8 @@ input UpdateCommentDto {
 
 input NewCommentContentDto {
   content: String!
+}
+
+input DeleteCommentDto {
+  commentId: String!
 }
