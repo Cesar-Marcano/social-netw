@@ -25,6 +25,7 @@
     "exactOptionalPropertyTypes": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "resolveJsonModule": true
   }
 }
