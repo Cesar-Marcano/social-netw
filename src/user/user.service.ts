@@ -146,4 +146,15 @@ export class UserService {
     // Return the updated follower document
     return follower;
   }
+
+  /**
+   * Verify if the user exists
+   * @param userId The ID of the user
+   * @throws NotFoundException if the user is not found
+   */
+  async checkIfUserExists(userId: mongoose.Types.ObjectId): Promise<void> {
+    const user = await this.userModel.findById(userId);
+
+    if (!user) throw new NotFoundException('User not found');
+  }
 }
