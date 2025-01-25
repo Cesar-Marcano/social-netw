@@ -22,6 +22,15 @@ export class CommentService {
     private readonly postService: PostService,
   ) {}
 
+  /**
+   * Creates a new comment.
+   *
+   * This method checks if the author and the post exist. If both are valid, it creates a new comment.
+   *
+   * @param comment - The comment object to be created.
+   * @returns A promise that resolves to the created comment document.
+   * @throws NotFoundException if the author or the post is not found.
+   */
   async create(comment: Comment): Promise<CommentDocument> {
     const user = await this.userService.findById(comment.author);
     const post = await this.postService.findPostById(comment.post);
@@ -36,6 +45,18 @@ export class CommentService {
     return this.commentModel.create(comment);
   }
 
+  /**
+   * Retrieves comments for a specific post.
+   *
+   * This method allows pagination for retrieving comments. It returns the comments for the given post
+   * along with the total count of comments.
+   *
+   * @param postId - The ID of the post to get comments for.
+   * @param page - The page number for pagination.
+   * @param limit - The number of comments per page.
+   * @returns A promise that resolves to a pagination response containing comments and the total count.
+   * @throws BadRequestException if the page or limit is less than 1.
+   */
   async getPostComments(
     postId: Types.ObjectId,
     page: number,
@@ -62,6 +83,18 @@ export class CommentService {
     };
   }
 
+  /**
+   * Updates an existing comment.
+   *
+   * This method allows an authorized user (the author of the comment) to update the content of a comment.
+   *
+   * @param commentId - The ID of the comment to be updated.
+   * @param commentData - The new data for the comment.
+   * @param userId - The ID of the user performing the update.
+   * @returns A promise that resolves to the updated comment document.
+   * @throws UnauthorizedException if the user is not the author of the comment.
+   * @throws NotFoundException if the comment is not found.
+   */
   async updateComment(
     commentId: Types.ObjectId,
     commentData: Partial<Comment>,
@@ -85,6 +118,17 @@ export class CommentService {
     return newComment!;
   }
 
+  /**
+   * Deletes a comment.
+   *
+   * This method allows an authorized user (the author of the comment) to delete a comment.
+   *
+   * @param commentId - The ID of the comment to be deleted.
+   * @param userId - The ID of the user performing the delete action.
+   * @returns A promise that resolves to a boolean indicating whether the deletion was successful.
+   * @throws UnauthorizedException if the user is not the author of the comment.
+   * @throws NotFoundException if the comment is not found.
+   */
   async deleteComment(
     commentId: Types.ObjectId,
     userId: Types.ObjectId,
@@ -101,6 +145,15 @@ export class CommentService {
     return result !== null;
   }
 
+  /**
+   * Finds a comment by its ID.
+   *
+   * This helper method is used to retrieve a comment by its unique identifier.
+   *
+   * @param commentId - The ID of the comment to be found.
+   * @returns A promise that resolves to the comment document.
+   * @throws NotFoundException if the comment is not found.
+   */
   async findCommentById(commentId: Types.ObjectId): Promise<CommentDocument> {
     const comment = await this.commentModel.findById(commentId);
 

@@ -14,22 +14,10 @@ import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      formatError: (formattedError, _error): GraphQLFormattedError => {
-        const { message, extensions } = formattedError;
-
-        return {
-          message,
-          extensions: {
-            code: extensions!['code'],
-            originalError: extensions!['originalError'],
-          },
-        };
-      },
-    }),
+    // Set up environment variables (global config)
     ConfigModule.forRoot({ isGlobal: true }),
+
+    // Set up Mongoose with async configuration
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -42,6 +30,36 @@ import { UserModule } from './user/user.module';
         ),
       }),
     }),
+
+    // Set up GraphQL with Apollo Driver
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      // Generate schema in 'src/schema.gql'
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      // Remove stack trace from GraphQL errors
+      formatError: (formattedError, _error): GraphQLFormattedError => {
+        const { message, extensions } = formattedError;
+
+        // If the error was an internal server error, retrieves a generic response to the client.
+        if (extensions!['code'] === 'INTERNAL_SERVER_ERROR') {
+          return {
+            message: 'Internal server error',
+            extensions: {
+              code: extensions!['code'],
+            },
+          };
+        }
+
+        return {
+          message,
+          extensions: {
+            code: extensions!['code'],
+            originalError: extensions!['originalError'],
+          },
+        };
+      },
+    }),
+
     UserModule,
     AuthModule,
     PostModule,

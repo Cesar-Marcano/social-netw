@@ -5,10 +5,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { MongooseTimestamp } from '../common/types/mongoose-timestamp.type';
 
+// This represents the type of a Comment document, including mongoose document and timestamp fields
 export type CommentDocument = HydratedDocument<Comment> & MongooseTimestamp;
 
 @ObjectType()
-@Schema({ timestamps: true })
+@Schema({ timestamps: true }) // Automatically adds `createdAt` and `updatedAt` fields
 export class Comment {
   @Field(() => ID)
   id?: mongoose.Types.ObjectId;

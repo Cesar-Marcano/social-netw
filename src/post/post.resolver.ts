@@ -16,33 +16,37 @@ import { Post, PostDocument } from './post.schema';
 import { PostService } from './post.service';
 import { SearchPost } from './types/search-post.type';
 
+@UseGuards(GqlAuthGuard) // Protects all the queries and mutations below, ensuring the user is authenticated
 @Resolver()
 export class PostResolver {
   constructor(private readonly postService: PostService) {}
 
-  @UseGuards(GqlAuthGuard)
+  // Query to retrieve a post by its ID
   @Query(() => Post)
   async getPost(@Args('postId') postId: string): Promise<PostDocument> {
+    // Finds a post by its ObjectId
     return this.postService.findPostById(new Types.ObjectId(postId));
   }
 
-  @UseGuards(GqlAuthGuard)
+  // Mutation to create a new post
   @Mutation(() => Post)
   async createPost(
     @Args('postContent') postContent: CreatePostDto,
-    @CurrentUser() currentUser: ICurrentUser,
+    @CurrentUser() currentUser: ICurrentUser, // Injects the current user
   ): Promise<PostDocument> {
+    // Creates a post with the content
     return this.postService.create({
       author: currentUser.userId,
       ...postContent,
     });
   }
 
-  @UseGuards(GqlAuthGuard)
+  // Mutation to search posts by text terms (title or content)
   @Mutation(() => SearchPost)
   async findPostByText(
-    @Args('searchParams') searchParams: FindPostByTextDto,
+    @Args('searchParams') searchParams: FindPostByTextDto, // Search parameters including term, page, and limit
   ): Promise<SearchPost> {
+    // Performs the search and returns the results with pagination
     return this.postService.findByText(
       searchParams.searchTerm,
       searchParams.page,
@@ -50,37 +54,42 @@ export class PostResolver {
     );
   }
 
-  @UseGuards(GqlAuthGuard)
+  // Query to retrieve a post by its ID (alternative query method)
   @Query(() => Post)
   async findPostById(
     @Args('searchParams') searchParams: FindPostByIdDto,
   ): Promise<Post> {
+    // Finds and returns a post by its ID
     return this.postService.findPostById(searchParams.postId);
   }
 
-  @UseGuards(GqlAuthGuard)
+  // TODO: Implement pagination.
+  // Query to retrieve posts by a specific author
   @Query(() => [Post])
   async findPostByAuthor(
     @Args('searchParams') searchParams: FindPostByAuthorDto,
   ): Promise<Post[]> {
+    // Finds and returns all posts by a specific author
     return this.postService.findPostByAuthor(searchParams.authorId);
   }
 
-  @UseGuards(GqlAuthGuard)
+  // Mutation to delete a post
   @Mutation(() => Boolean)
   async deletePost(
     @Args('postInfo') postInfo: DeletePostDto,
-    @CurrentUser() currentUser: ICurrentUser,
+    @CurrentUser() currentUser: ICurrentUser, // Injects the current user
   ): Promise<boolean> {
+    // Deletes a post only if the current user is the author of the post
     return this.postService.deletePost(postInfo.postId, currentUser.userId);
   }
 
-  @UseGuards(GqlAuthGuard)
+  // Mutation to update a post
   @Mutation(() => Post)
   async updatePost(
     @Args('postInfo') postInfo: UpdatePostDto,
-    @CurrentUser() currentUser: ICurrentUser,
+    @CurrentUser() currentUser: ICurrentUser, // Injects the current user
   ): Promise<Post> {
+    // Updates the post with the provided content if the current user is the author
     return this.postService.updatePost(
       postInfo.postId,
       postInfo.newPostContent,
