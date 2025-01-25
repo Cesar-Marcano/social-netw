@@ -7,7 +7,13 @@ type Post {
   author: String!
   title: String!
   content: String!
-  privacy: String!
+  privacy: PostPrivacy!
+}
+
+enum PostPrivacy {
+  PUBLIC
+  MUTUAL_FOLLOWERS
+  PRIVATE
 }
 
 type SearchPost {
@@ -129,12 +135,6 @@ input CreatePostDto {
   title: String!
   content: String!
   privacy: PostPrivacy!
-}
-
-enum PostPrivacy {
-  PUBLIC
-  MUTUAL_FOLLOWERS
-  PRIVATE
 }
 
 input FindPostByTextDto {

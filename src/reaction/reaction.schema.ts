@@ -36,6 +36,7 @@ export class Reaction {
   // This field defines the type of the target.
   // It uses the ReactionTarget enum to determine whether the target is a Post or a Comment.
   @Prop({
+    type: String,
     required: true,
     immutable: true,
     enum: ReactionTarget,
@@ -44,7 +45,7 @@ export class Reaction {
   targetType!: ReactionTarget;
 
   // The type of the reaction
-  @Prop({ required: true, enum: ReactionType })
+  @Prop({ type: String, required: true, enum: ReactionType })
   @Field(() => ReactionType)
   reactionType!: ReactionType;
 }

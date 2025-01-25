@@ -36,7 +36,7 @@ export class Post {
   content!: string;
 
   // Privacy setting for the post, using PostPrivacy enum. Defaults to 'PUBLIC'.
-  @Prop({ enum: PostPrivacy, default: PostPrivacy.PUBLIC })
+  @Prop({ type: String, enum: PostPrivacy, default: PostPrivacy.PUBLIC })
   @Field()
   privacy!: PostPrivacy;
 }
