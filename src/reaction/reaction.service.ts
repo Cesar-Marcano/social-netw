@@ -2,7 +2,11 @@ import { Model, Types } from 'mongoose';
 import { CommentService } from 'src/comment/comment.service';
 import { PostService } from 'src/post/post.service';
 
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Reaction, ReactionDocument } from './reaction.schema';
@@ -43,5 +47,32 @@ export class ReactionService {
     }
 
     return this.reactionModel.create(reactionData);
+  }
+
+  /**
+   * Deletes a reaction.
+   *
+   * @param {author} Types.ObjectId
+   * @param {targetId} Types.ObjectId
+   * @param {targetType} ReactionTarget
+   * @returns {Promise<boolean>}
+   * @throws {NotFoundException}
+   */
+  async deleteReaction(
+    author: Types.ObjectId,
+    targetId: Types.ObjectId,
+    targetType: ReactionTarget,
+  ): Promise<boolean> {
+    const reaction = await this.reactionModel.findOneAndDelete({
+      author,
+      targetId,
+      targetType,
+    });
+
+    if (!reaction) {
+      throw new NotFoundException('Reaction not found');
+    }
+
+    return true;
   }
 }
