@@ -15,11 +15,11 @@ import GetPostCommentsDto from './dto/get-post-comments.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { GetPostCommentsResponse } from './types/get-post-comments-response.type';
 
+@UseGuards(GqlAuthGuard)
 @Resolver()
 export class CommentResolver {
   constructor(private readonly commentService: CommentService) {}
 
-  @UseGuards(GqlAuthGuard)
   @Mutation(() => Comment)
   async createComment(
     @Args('commentData') commentData: CreateCommentDto,
@@ -31,7 +31,6 @@ export class CommentResolver {
     });
   }
 
-  @UseGuards(GqlAuthGuard)
   @Mutation(() => Comment)
   async updateComment(
     @Args('commentInfo') commentInfo: UpdateCommentDto,
@@ -44,7 +43,6 @@ export class CommentResolver {
     );
   }
 
-  @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
   async deleteComment(
     @Args('commentInfo') commentInfo: DeleteCommentDto,
@@ -56,7 +54,6 @@ export class CommentResolver {
     );
   }
 
-  @UseGuards(GqlAuthGuard)
   @Query(() => GetPostCommentsResponse)
   async getPostComments(
     @Args('postInfo') postInfo: GetPostCommentsDto,
@@ -68,7 +65,6 @@ export class CommentResolver {
     );
   }
 
-  @UseGuards(GqlAuthGuard)
   @Query(() => Comment)
   async getComment(
     @Args('commentInfo') commentInfo: GetCommentDto,
