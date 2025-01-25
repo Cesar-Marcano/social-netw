@@ -1,54 +1,34 @@
-import helmet from 'helmet';
-import {
-  utilities as nestWinstonModuleUtilities,
-  WinstonModule,
-} from 'nest-winston';
-import * as winston from 'winston';
-
-import { ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
-import * as packageJson from '../package.json';
+import { globalPipes } from './config/global-pipes';
+import { helmetConfig } from './config/helmet-config';
+import { createLogger } from './config/winston-logger';
+import { RemoveHeaderInterceptor } from './config/remove-headers.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger({
-      level: 'debug',
-      transports: [
-        new winston.transports.Console({
-          format: winston.format.combine(
-            winston.format.timestamp(),
-            winston.format.ms(),
-            nestWinstonModuleUtilities.format.nestLike(packageJson.name, {
-              colors: true,
-              prettyPrint: true,
-              processId: true,
-              appName: true,
-            }),
-          ),
-        }),
-        new winston.transports.File({ filename: 'logs/application.log' }),
-      ],
-    }),
+    logger: createLogger(),
   });
 
-  const { httpAdapter } = app.get(HttpAdapterHost);
-  httpAdapter.getInstance().disable('x-powered-by');
+  app.useGlobalInterceptors(new RemoveHeaderInterceptor());
 
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'"],
-          frameAncestors: ["'self'"],
-        },
-      },
-    }),
-  );
+  app.use(helmetConfig());
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(globalPipes);
 
-  await app.listen(process.env['PORT'] ?? 3000);
+  const configService = app.get(ConfigService);
+
+  const logger = new Logger();
+
+  const port = configService.get('PORT', 3000);
+  if (port === 3000 && process.env['NODE_ENV']?.toLowerCase() == 'production') {
+    logger.warn('Using port 3000 in production.');
+  }
+
+  await app.listen(configService.get('PORT', 3000));
 }
+
 bootstrap();

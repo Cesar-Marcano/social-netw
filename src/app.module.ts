@@ -28,7 +28,6 @@ import { UserModule } from './user/user.module';
           },
         };
       },
-      debug: false,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
