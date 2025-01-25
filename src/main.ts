@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 
@@ -12,22 +11,22 @@ async function bootstrap() {
     logger: createLogger(),
   });
 
-  app.enableCors();
+  const configService = app.get(ConfigService);
+
+  const corsOrigin = configService.get<string>('CORS_ORIGIN', '*');
+  const port = configService.get('PORT', 3000);
+
+  app.enableCors({
+    origin: corsOrigin,
+    methods: 'GET,POST',
+    allowedHeaders: 'Content-Type,Authorization',
+  });
 
   app.use(helmetConfig());
 
   app.useGlobalPipes(globalPipes);
 
-  const configService = app.get(ConfigService);
-
-  const logger = new Logger();
-
-  const port = configService.get('PORT', 3000);
-  if (port === 3000 && process.env['NODE_ENV']?.toLowerCase() == 'production') {
-    logger.warn('Using port 3000 in production.');
-  }
-
-  await app.listen(configService.get('PORT', 3000));
+  await app.listen(port);
 }
 
 bootstrap();
