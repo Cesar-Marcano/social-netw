@@ -172,4 +172,16 @@ export class PostService {
 
     return true;
   }
+
+  /**
+   * Check if the post exists.
+   *
+   * @param postId - The ObjectId of the post.
+   * @throws NotFoundException if the post cannot be found.
+   */
+  async checkIfPostExists(postId: Types.ObjectId): Promise<void> {
+    const post = await this.postModel.findById(postId);
+
+    if (!post) throw new NotFoundException('Post not found.');
+  }
 }
