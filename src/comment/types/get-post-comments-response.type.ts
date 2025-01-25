@@ -1,6 +1,8 @@
 import PaginationResponse from 'src/common/types/pagination-response.type';
-import { Comment } from '../comment.schema';
+
 import { Field, ObjectType } from '@nestjs/graphql';
+
+import { Comment } from '../comment.schema';
 
 @ObjectType()
 export class GetPostCommentsResponse implements PaginationResponse<Comment> {

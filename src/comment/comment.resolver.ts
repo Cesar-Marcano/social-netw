@@ -1,16 +1,18 @@
+import { GqlAuthGuard } from 'src/auth/auth.guard';
+import { ICurrentUser } from 'src/auth/types/current-user.type';
+import { CurrentUser } from 'src/auth/user.decorator';
+import PaginationResponse from 'src/common/types/pagination-response.type';
+
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { Comment, CommentDocument } from './comment.schema';
 import { CommentService } from './comment.service';
 import CreateCommentDto from './dto/create-comment.dto';
-import { CurrentUser } from 'src/auth/user.decorator';
-import { ICurrentUser } from 'src/auth/types/current-user.type';
-import { Comment, CommentDocument } from './comment.schema';
-import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from 'src/auth/auth.guard';
-import { UpdateCommentDto } from './dto/update-comment.dto';
 import DeleteCommentDto from './dto/delete-comment.dto';
-import PaginationResponse from 'src/common/types/pagination-response.type';
 import GetCommentDto from './dto/get-comment.dto';
 import GetPostCommentsDto from './dto/get-post-comments.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 import { GetPostCommentsResponse } from './types/get-post-comments-response.type';
 
 @Resolver()

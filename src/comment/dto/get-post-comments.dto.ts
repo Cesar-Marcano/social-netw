@@ -1,6 +1,7 @@
-import { Field, InputType } from '@nestjs/graphql';
 import { IsInt, IsMongoId, IsPositive } from 'class-validator';
 import { Types } from 'mongoose';
+
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export default class GetPostCommentsDto {
@@ -11,10 +12,10 @@ export default class GetPostCommentsDto {
   @IsInt()
   @IsPositive()
   @Field()
-  page!: number
+  page!: number;
 
   @IsInt()
   @IsPositive()
   @Field()
-  limit!: number
+  limit!: number;
 }

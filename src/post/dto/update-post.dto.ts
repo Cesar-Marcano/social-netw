@@ -1,8 +1,10 @@
-import { Types } from 'mongoose';
-import { Field, InputType } from '@nestjs/graphql';
 import { IsMongoId, IsString, Length, ValidateNested } from 'class-validator';
-import { CreatePostDto } from './create-post.dto';
+import { Types } from 'mongoose';
+
+import { Field, InputType } from '@nestjs/graphql';
+
 import { PostPrivacy } from '../types/post-privacy.enum';
+import { CreatePostDto } from './create-post.dto';
 
 @InputType()
 export class NewPostContentDto implements Partial<CreatePostDto> {

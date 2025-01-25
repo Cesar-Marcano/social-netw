@@ -1,18 +1,20 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
+import helmet from 'helmet';
 import {
-  WinstonModule,
   utilities as nestWinstonModuleUtilities,
+  WinstonModule,
 } from 'nest-winston';
 import * as winston from 'winston';
-import helmet from 'helmet';
+
+import { ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+
+import { AppModule } from './app.module';
 import * as packageJson from '../package.json';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger({
+      level: 'debug',
       transports: [
         new winston.transports.Console({
           format: winston.format.combine(

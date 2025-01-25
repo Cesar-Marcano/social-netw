@@ -1,14 +1,16 @@
+import { GraphQLFormattedError } from 'graphql';
+import { join } from 'path';
+
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'path';
-import { PostModule } from './post/post.module';
-import { GraphQLFormattedError } from 'graphql';
+import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
+
+import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
+import { PostModule } from './post/post.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [

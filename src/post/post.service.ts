@@ -1,3 +1,5 @@
+import { Model, Types } from 'mongoose';
+
 import {
   BadRequestException,
   Injectable,
@@ -5,8 +7,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+
 import { Post, PostDocument } from './post.schema';
-import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class PostService {

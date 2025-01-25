@@ -3,17 +3,18 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+
 import Password from '../user/data-object/password.data-object';
 import { UserDocument } from '../user/user.schema';
 import { UserService } from '../user/user.service';
 import PasswordHasher from '../user/utils/password-hasher';
 import { RegisterDto } from './dto/register.dto';
-import { Payload } from './types/payload.type';
 import { AccessTokenResponse } from './types/acccess-token-response.type';
-import { TokenType } from './types/token-type.enum';
+import { Payload } from './types/payload.type';
 import { RefreshTokenResponse } from './types/refresh-token-response.type';
-import { ConfigService } from '@nestjs/config';
+import { TokenType } from './types/token-type.enum';
 
 @Injectable()
 export class AuthService {

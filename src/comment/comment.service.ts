@@ -1,3 +1,8 @@
+import { Model, Types } from 'mongoose';
+import PaginationResponse from 'src/common/types/pagination-response.type';
+import { PostService } from 'src/post/post.service';
+import { UserService } from 'src/user/user.service';
+
 import {
   BadRequestException,
   Injectable,
@@ -5,11 +10,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+
 import { Comment, CommentDocument } from './comment.schema';
-import { Model, Types } from 'mongoose';
-import { UserService } from 'src/user/user.service';
-import { PostService } from 'src/post/post.service';
-import PaginationResponse from 'src/common/types/pagination-response.type';
 
 @Injectable()
 export class CommentService {

@@ -1,3 +1,6 @@
+import { MongoServerError } from 'mongodb';
+import mongoose, { Model } from 'mongoose';
+
 import {
   BadRequestException,
   Injectable,
@@ -5,11 +8,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from './user.schema';
-import mongoose, { Model } from 'mongoose';
-import { MongoServerError } from 'mongodb';
-import PasswordHasher from './utils/password-hasher';
+
 import Password from './data-object/password.data-object';
+import { User, UserDocument } from './user.schema';
+import PasswordHasher from './utils/password-hasher';
 
 @Injectable()
 export class UserService {

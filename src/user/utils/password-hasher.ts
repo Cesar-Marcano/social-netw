@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt';
+
 import Password, { HASH_REGEX } from '../data-object/password.data-object';
 
 export default class PasswordHasher {
@@ -17,7 +18,9 @@ export default class PasswordHasher {
     const bcryptRounds = parseInt(process.env['BCRYPT_ROUNDS'] ?? '10');
 
     if (isNaN(bcryptRounds)) {
-      throw new Error('Invalid value for BCRYPT_ROUNDS in the environment. Please ensure it is a valid number.');
+      throw new Error(
+        'Invalid value for BCRYPT_ROUNDS in the environment. Please ensure it is a valid number.',
+      );
     }
 
     const salt = await bcrypt.genSalt(bcryptRounds);

@@ -1,10 +1,11 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { IsJWT, IsNotEmpty } from "class-validator";
+import { IsJWT, IsNotEmpty } from 'class-validator';
+
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class GetAccessTokenDto {
-    @IsJWT()
-    @IsNotEmpty()
-    @Field()
-    refreshToken!: string;
+  @IsJWT()
+  @IsNotEmpty()
+  @Field()
+  refreshToken!: string;
 }

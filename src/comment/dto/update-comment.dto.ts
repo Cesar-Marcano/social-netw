@@ -1,6 +1,8 @@
-import { Types } from 'mongoose';
-import { Field, InputType } from '@nestjs/graphql';
 import { IsMongoId, IsString, Length, ValidateNested } from 'class-validator';
+import { Types } from 'mongoose';
+
+import { Field, InputType } from '@nestjs/graphql';
+
 import CreateCommentDto from './create-comment.dto';
 
 @InputType()
