@@ -161,4 +161,16 @@ export class CommentService {
 
     return comment;
   }
+
+  /**
+   * Check if the comment exists.
+   *
+   * @param commentId - The ObjectId of the comment.
+   * @throws NotFoundException if the comment cannot be found.
+   */
+  async checkIfCommentExists(commentId: Types.ObjectId): Promise<void> {
+    const comment = await this.commentModel.findById(commentId);
+
+    if (!comment) throw new NotFoundException('Comment not found.');
+  }
 }
