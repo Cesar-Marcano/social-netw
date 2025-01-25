@@ -14,11 +14,21 @@ export class Comment {
   @Field(() => ID)
   id?: mongoose.Types.ObjectId;
 
-  @Prop({ required: true, ref: 'User', type: mongoose.Types.ObjectId })
+  @Prop({
+    required: true,
+    ref: 'User',
+    type: mongoose.Types.ObjectId,
+    immutable: true,
+  })
   @Field(() => String)
   author!: mongoose.Types.ObjectId;
 
-  @Prop({ required: true, ref: 'Post', type: mongoose.Types.ObjectId })
+  @Prop({
+    required: true,
+    ref: 'Post',
+    type: mongoose.Types.ObjectId,
+    immutable: true,
+  })
   @Field(() => String)
   post!: mongoose.Types.ObjectId;
 
