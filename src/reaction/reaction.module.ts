@@ -1,10 +1,13 @@
+import { CommentModule } from 'src/comment/comment.module';
+import { PostModule } from 'src/post/post.module';
+import { UserModule } from 'src/user/user.module';
+
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+
+import { ReactionResolver } from './comment.resolver';
 import { Reaction, ReactionSchema } from './reaction.schema';
 import { ReactionService } from './reaction.service';
-import { PostModule } from 'src/post/post.module';
-import { CommentModule } from 'src/comment/comment.module';
-import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
@@ -15,6 +18,6 @@ import { UserModule } from 'src/user/user.module';
     CommentModule,
     UserModule,
   ],
-  providers: [ReactionService],
+  providers: [ReactionService, ReactionResolver],
 })
 export class ReactionModule {}

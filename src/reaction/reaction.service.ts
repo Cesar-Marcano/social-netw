@@ -1,6 +1,7 @@
 import { Model, Types } from 'mongoose';
 import { CommentService } from 'src/comment/comment.service';
 import { PostService } from 'src/post/post.service';
+import { UserService } from 'src/user/user.service';
 
 import {
   BadRequestException,
@@ -11,7 +12,6 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { Reaction, ReactionDocument } from './reaction.schema';
 import { ReactionTarget } from './types/reaction-target.enum';
-import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class ReactionService {
