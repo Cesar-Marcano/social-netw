@@ -11,7 +11,9 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Reaction, ReactionDocument } from './reaction.schema';
+import ReactionCount from './types/reaction-count.type';
 import { ReactionTarget } from './types/reaction-target.enum';
+import { ReactionType } from './types/reaction-type.enum';
 
 @Injectable()
 export class ReactionService {
@@ -74,5 +76,41 @@ export class ReactionService {
     }
 
     return true;
+  }
+
+  /**
+   *
+   * @param {targetId} Types.ObjectId
+   * @param {targetType} ReactionTarget
+   * @returns {Promise<ReactionCount>}
+   */
+  async getReactionCount(
+    targetId: Types.ObjectId,
+    targetType: ReactionTarget,
+  ): Promise<ReactionCount> {
+    const reactionCounts = await Promise.all(
+      Object.values(ReactionType).map(async (reactionType) => {
+        const count = await this.reactionModel.countDocuments({
+          targetId,
+          targetType,
+          reactionType,
+        });
+        return { [reactionType]: count };
+      }),
+    );
+
+    const combinedCounts = reactionCounts.reduce((acc, curr) => {
+      return { ...acc, ...curr };
+    }, {});
+
+    const totalReactions = Object.values(combinedCounts).reduce(
+      (sum, count) => sum + (count as number),
+      0,
+    );
+
+    return {
+      ...combinedCounts,
+      totalReactions,
+    } as ReactionCount;
   }
 }

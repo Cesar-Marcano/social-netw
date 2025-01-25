@@ -27,12 +27,44 @@ type GetPostCommentsResponse {
   data: [Comment!]!
 }
 
+type Reaction {
+  author: String!
+  targetId: String!
+  targetType: ReactionTarget!
+  reactionType: ReactionType!
+}
+
+enum ReactionTarget {
+  POST
+  COMMENT
+}
+
+enum ReactionType {
+  HAHA
+  LOVE
+  SAD
+  WOW
+  LIKE
+  ANGRY
+}
+
+type ReactionCount {
+  haha: Int!
+  sad: Int!
+  love: Int!
+  wow: Int!
+  angry: Int!
+  totalReactions: Int!
+}
+
 type Query {
   getPost(postId: String!): Post!
   findPostById(searchParams: FindPostByIdDto!): Post!
   findPostByAuthor(searchParams: FindPostByAuthorDto!): [Post!]!
   getPostComments(postInfo: GetPostCommentsDto!): GetPostCommentsResponse!
   getComment(commentInfo: GetCommentDto!): Comment!
+  getPostReactionCount(postInfo: GetPostReactionCountDto!): ReactionCount!
+  getCommentReactionCount(commentInfo: GetCommentReactionCountDto!): ReactionCount!
 }
 
 input FindPostByIdDto {
@@ -53,6 +85,14 @@ input GetCommentDto {
   commentId: String!
 }
 
+input GetPostReactionCountDto {
+  postId: String!
+}
+
+input GetCommentReactionCountDto {
+  commentId: String!
+}
+
 type Mutation {
   login(userData: LoginDto!): String!
   register(userData: RegisterDto!): String!
@@ -64,6 +104,10 @@ type Mutation {
   createComment(commentData: CreateCommentDto!): Comment!
   updateComment(commentInfo: UpdateCommentDto!): Comment!
   deleteComment(commentInfo: DeleteCommentDto!): Boolean!
+  addReactionToPost(reactionInfo: AddPostReactionDto!): Reaction!
+  addReactionToComment(reactionInfo: AddCommentReactionDto!): Reaction!
+  removeReactionToPost(reactionInfo: RemovePostReactionDto!): Boolean!
+  removeReactionToComment(reactionInfo: RemoveCommentReactionDto!): Boolean!
 }
 
 input LoginDto {
@@ -128,5 +172,23 @@ input NewCommentContentDto {
 }
 
 input DeleteCommentDto {
+  commentId: String!
+}
+
+input AddPostReactionDto {
+  type: ReactionType!
+  postId: String!
+}
+
+input AddCommentReactionDto {
+  type: ReactionType!
+  commentId: String!
+}
+
+input RemovePostReactionDto {
+  postId: String!
+}
+
+input RemoveCommentReactionDto {
   commentId: String!
 }
