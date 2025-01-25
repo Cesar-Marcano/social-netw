@@ -6,14 +6,13 @@ import { AppModule } from './app.module';
 import { globalPipes } from './config/global-pipes';
 import { helmetConfig } from './config/helmet-config';
 import { createLogger } from './config/winston-logger';
-import { RemoveHeaderInterceptor } from './config/remove-headers.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: createLogger(),
   });
 
-  app.useGlobalInterceptors(new RemoveHeaderInterceptor());
+  app.enableCors();
 
   app.use(helmetConfig());
 
