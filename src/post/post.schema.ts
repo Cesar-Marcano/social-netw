@@ -16,7 +16,12 @@ export class Post {
   id?: mongoose.Types.ObjectId;
 
   // Author of the post, referencing the 'User' model. This is required.
-  @Prop({ required: true, ref: 'User', type: mongoose.Types.ObjectId })
+  @Prop({
+    required: true,
+    ref: 'User',
+    type: mongoose.Types.ObjectId,
+    immutable: true,
+  })
   @Field(() => String)
   author!: mongoose.Types.ObjectId;
 
