@@ -2,6 +2,7 @@ import { PostModule } from 'src/post/post.module';
 import { UserModule } from 'src/user/user.module';
 
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { CommentResolver } from './comment.resolver';
@@ -15,5 +16,6 @@ import { CommentService } from './comment.service';
     PostModule,
   ],
   providers: [CommentService, CommentResolver],
+  exports: [ConfigService],
 })
 export class CommentModule {}
