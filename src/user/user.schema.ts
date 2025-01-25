@@ -10,7 +10,7 @@ export type UserDocument = HydratedDocument<User> & MongooseTimestamp;
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop({ required: true, minlength: 3, maxlength: 20 })
+  @Prop({ required: true, unique: true, minlength: 3, maxlength: 20 })
   username!: string;
 
   @Prop({ required: true, select: false })

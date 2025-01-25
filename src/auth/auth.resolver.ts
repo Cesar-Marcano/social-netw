@@ -1,3 +1,6 @@
+import { MongoDuplicateKeyExceptionFilter } from 'src/common/mongo-duplicate-key.filter';
+
+import { UseFilters } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { AuthService } from './auth.service';
@@ -5,6 +8,7 @@ import { GetAccessTokenDto } from './dto/get-access-token.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
+@UseFilters(MongoDuplicateKeyExceptionFilter)
 @Resolver()
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}

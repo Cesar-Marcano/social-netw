@@ -1,10 +1,8 @@
-import { MongoServerError } from 'mongodb';
 import mongoose, { Model } from 'mongoose';
 
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -20,21 +18,11 @@ export class UserService {
   ) {}
 
   public async create(userData: User): Promise<UserDocument> {
-    try {
-      userData.password = await PasswordHasher.hash(
-        new Password(userData.password),
-      );
+    userData.password = await PasswordHasher.hash(
+      new Password(userData.password),
+    );
 
-      const newUser = new this.userModel(userData);
-
-      return await newUser.save();
-    } catch (error) {
-      if (error instanceof MongoServerError && error.code === 11000) {
-        throw new BadRequestException('The user already exists.');
-      }
-
-      throw new InternalServerErrorException();
-    }
+    return await this.userModel.create(userData);
   }
 
   public async findByEmail(email: string): Promise<UserDocument | null> {
