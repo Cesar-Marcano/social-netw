@@ -6,8 +6,8 @@ export class FindPostByTextDto {
   searchTerm!: string;
 
   @Field(() => Int)
-  page?: number;
+  page!: number;
 
   @Field(() => Int)
-  limit?: number;
+  limit!: number;
 }
