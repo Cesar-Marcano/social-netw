@@ -25,19 +25,12 @@ export class UserService {
         new Password(userData.password),
       );
 
-      return this.userModel.create(userData);
+      const newUser = new this.userModel(userData);
+
+      return await newUser.save();
     } catch (error) {
-      if (error instanceof MongoServerError && error.code)
-        if (error.code === 11000) {
-          if (error['keyPattern']?.email) {
-            throw new BadRequestException('Email in use.');
-          }
-          if (error['keyPattern']?.username) {
-            throw new BadRequestException('Username in use.');
-          }
-        }
-      if (process.env['NODE_ENV']?.toLowerCase() !== 'production') {
-        throw error;
+      if (error instanceof MongoServerError && error.code === 11000) {
+        throw new BadRequestException('The user already exists.');
       }
 
       throw new InternalServerErrorException();
