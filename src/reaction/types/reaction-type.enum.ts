@@ -10,4 +10,6 @@ export enum ReactionType {
 }
 
 // Registers the ReactionType enum in GraphQL schema
-registerEnumType(ReactionType);
+registerEnumType(ReactionType, {
+  name: 'ReactionType',
+});
