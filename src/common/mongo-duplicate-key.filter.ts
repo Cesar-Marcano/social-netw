@@ -25,10 +25,7 @@ export class MongoDuplicateKeyExceptionFilter implements ExceptionFilter {
       if (keyPattern) {
         const duplicatedField = Object.keys(keyPattern)[0];
 
-        // Log the duplicate key field for debugging purposes
         if (duplicatedField) {
-          this.logger.warn(`Duplicate key error on field: ${duplicatedField}`);
-
           // Throw a BadRequestException with a message indicating the field that is duplicated
           throw new BadRequestException(
             `${duplicatedField} already registered.`, // Message for the user
